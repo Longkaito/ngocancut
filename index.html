@@ -238,13 +238,92 @@
             text-align: center;
         }
 
+        /* Thêm styles cho popup */
+        .birthday-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+            color: #333;
+            animation: popupFadeIn 0.5s ease-in-out;
+        }
+
+        .birthday-popup h2 {
+            color: #ff4081;
+            margin-bottom: 10px;
+        }
+
+        .birthday-popup p {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .wishes-popup {
+            background-color: rgba(255, 192, 203, 0.95);
+        }
+
+        .wish-button {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .wish-button:hover {
+            background-color: #e91e63;
+        }
+
+        #video-container {
+            margin: 20px 0;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: all 1s ease-out;
+        }
+        
+        #video-container.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        #birthday-video {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        
+        .birthday-popup {
+            max-width: 80%;
+            width: 600px;
+        }
+
 	</style>
 </head>
 
 <body class="text-center">
 <h1>Birthday Cake 🎂</h1>
 <br>
-<button id="start">START (required on Chrome)</button>
+<button id="start">Bắt đầu thổi nến</button>
 <button style="display: none" id="startconsoledebug">enable console logs</button>
 <button style="display: none" id="stopconsoledebug">disable console logs</button>
 <br>
@@ -264,7 +343,7 @@
 		</div>
 	</div>
 	<div class="text-center">
-		<h5 class="cake-off">❣ Happy Birthday Dude ❣ </h5>
+		<h5 class="cake-off">❣ Happy Birthday Ngoc Boo ❣ </h5>
 		<p class="cake-off">❤ Wish you best ❤ </p>
 	</div>
 
@@ -272,6 +351,26 @@
 <!--
 	<canvas id="meter" width="500" height="50"></canvas>
 -->
+
+<div id="birthday-popup" class="birthday-popup">
+    <h2>🎉 Happy Birthday! 🎉</h2>
+    <p>Chúc mừng sinh nhật giáng sinh!</p>
+    <p>Chúc mừng sinh nhật giáng sinh!</p>
+    <p>Chúc mừng sinh nhật giáng sinh!</p>
+    <button id="show-wishes" class="wish-button">Xem lời chúc</button>
+</div>
+
+<div id="wishes-popup" class="birthday-popup wishes-popup">
+    <h2>💝 Lời chúc sinh nhật 💝</h2>
+    <p>โดนหลอกไม่มีคำอธิษฐานเหมือนทุกปี!</p>
+    <div id="video-container" style="display: none;">
+        <video id="birthday-video" width="100%" controls autoplay muted>
+            <source src="./video.MP4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <button id="close-wishes" class="wish-button">Đóng</button>
+</div>
 
 <script src="cake.js"></script>
 <script src="volume-meter.js"></script>
@@ -282,5 +381,36 @@
 <script src="demoAudioRecorder.js"></script>
 <script src="demoAudioDetectionListeners.js"></script>
 <script src="demo.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const videoContainer = document.getElementById('video-container');
+    const wishesPopup = document.getElementById('wishes-popup');
+    const closeWishesButton = document.getElementById('close-wishes');
+    
+    // Add click handler for close button
+    closeWishesButton.addEventListener('click', function() {
+        location.reload();
+    });
+    
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.target.style.display === 'block') {
+                videoContainer.style.display = 'block';
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        videoContainer.classList.add('show');
+                    }, 1000);
+                });
+            }
+        });
+    });
+
+    observer.observe(wishesPopup, {
+        attributes: true,
+        attributeFilter: ['style']
+    });
+});
+</script>
 </body>
 </html>

@@ -84,6 +84,15 @@ window.onload = function() {
         alert('getUserMedia threw exception :' + e);
     }
 
+    document.getElementById('show-wishes').addEventListener('click', function() {
+        document.getElementById('birthday-popup').style.display = 'none';
+        document.getElementById('wishes-popup').style.display = 'block';
+    });
+
+    document.getElementById('close-wishes').addEventListener('click', function() {
+        document.getElementById('wishes-popup').style.display = 'none';
+    });
+
 }
 
 
